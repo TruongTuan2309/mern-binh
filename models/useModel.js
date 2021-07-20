@@ -3,20 +3,20 @@ import bcrypt from 'bcryptjs'
 const userSchema = mongoose.Schema({
     name: {
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     password: { 
         type: String,
-        require: true,
+        required: true,
     },
     isAdmin: {
         type: Boolean,
-        require: true,
+        required: true,
         default: false
     },
 },{
@@ -29,7 +29,7 @@ userSchema.pre('save', async function (next){
     if(!this.isModified('password')){
         next()
     }
-    const salt=await bcrypt.getSalt(10);
+    const salt=await bcrypt.genSalt(10);
     this.password=await bcrypt.hash(this.password,salt)
 })
 const User = mongoose.model('User',userSchema);
